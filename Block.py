@@ -31,3 +31,22 @@ print(block_C.parent_hash)
 print(block_A.__dict__)
 print(block_B.__dict__)
 print(block_C.__dict__)
+
+block_D = Block()
+block_D.id = "D"
+block_D.history = "Luna likes fish."
+block_D.parent_id = block_C.id
+
+block_serialized = json.dumps(block_D.__dict__).encode('utf-8')
+print(block_serialized)
+
+payload = block_serialized
+for i in range(100000000):
+    nonce = str(i).encode('utf-8')
+    result  = hashlib.sha256(payload + nonce).hexdigest()
+    if result.startswith('000000'):
+        print(f"Success with nonce {i}")
+        print(f"Hash is {result}")
+        break
+block_D.parent_hash = result
+print(block_D.__dict__)
